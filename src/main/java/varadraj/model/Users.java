@@ -7,12 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 
 @Entity
-@Table(name="user")
-public class User {
+public class Users {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,27 +21,27 @@ public class User {
 	private String passwordHash;
 	private ZonedDateTime creationDateTime;
 	
-	public User() {
+	public Users() {
 		
 	}
 
-	public User(String username, String passwordHash, ZonedDateTime creationDateTime) {
+	public Users(String username, String passwordHash) {
 		super();
 		this.username = username;
 		this.passwordHash = passwordHash;
-		this.creationDateTime = creationDateTime;
+		this.creationDateTime = ZonedDateTime.now();
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null)
 			return false;
-		if(!User.class.isAssignableFrom(obj.getClass()))
+		if(!Users.class.isAssignableFrom(obj.getClass()))
 			return false;
 		
-		final User user = (User) obj;
+		final Users user = (Users) obj;
 		
-		if(this.getUserID() != user.getUserID())
+		if(this.getUsername() != user.getUsername())
 			return false;
 		return true;
 	}
@@ -78,9 +76,6 @@ public class User {
 
 	public void setCreationDateTime(ZonedDateTime creationDateTime) {
 		this.creationDateTime = creationDateTime;
-	}
-	
-	
-	
+	}	
 
 }
