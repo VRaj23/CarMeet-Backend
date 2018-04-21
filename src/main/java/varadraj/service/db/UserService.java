@@ -33,6 +33,10 @@ public class UserService {
 		return userRepository.findByUsername(username);
 	}
 	
+	public Users getUser(long userID) {
+		return userRepository.findByUserID(userID);
+	}
+	
 	public boolean validateLogin(String username, String password) {
 		Users user = userRepository.findByUsername(username);
 			

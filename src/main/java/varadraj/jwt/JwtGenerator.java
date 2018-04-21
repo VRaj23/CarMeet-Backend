@@ -12,7 +12,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtGenerator {
 	
-	private long expireInMinutes = 10L;
+	private long expireInMinutes = 30L;
 	private String signingKey = "TestKey";
 	
 	public String generateToken(long userID) {
