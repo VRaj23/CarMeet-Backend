@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import varadraj.model.BaseResponse;
 import varadraj.model.Users;
 import varadraj.model.jwt.LoginRequest;
 import varadraj.service.db.UserService;
@@ -23,7 +24,7 @@ public class RegisterUser {
 	
 	
 	@PostMapping
-	public String registerUser(@RequestBody final LoginRequest loginRequest	) {
+	public BaseResponse registerUser(@RequestBody final LoginRequest loginRequest	) {
 		
 		System.out.println("registerUser "+loginRequest.getUsername());
 		
@@ -32,7 +33,7 @@ public class RegisterUser {
 		
 		long id = userService.saveUser(user);
 		
-		return "User registered "+new Long(id).toString();
+		return new BaseResponse(201, new Long(id).toString() );
 	}
 
 

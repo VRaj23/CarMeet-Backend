@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import varadraj.jwt.JwtGenerator;
+import varadraj.model.BaseResponse;
 import varadraj.model.jwt.LoginRequest;
 import varadraj.service.db.UserService;
 
@@ -24,11 +25,12 @@ public class Login {
 	}
 	
 	@PostMapping
-	public String login(@RequestBody final LoginRequest loginRequest) {
+	public BaseResponse login(@RequestBody final LoginRequest loginRequest) {
 		if(userService.validateLogin(loginRequest.getUsername(), loginRequest.getPassword()) )
-			return jwtGenerator.generateToken(userService.getUser(loginRequest.getUsername()).getUserID());
+			return new BaseResponse(200,
+					jwtGenerator.generateToken(userService.getUser(loginRequest.getUsername()).getUserID()) );
 		else
-			return "Login Failed: Username or Password is Incorrect";
+			return new BaseResponse(401,"Login Failed: Username or Password is Incorrect");
 	}
 
 }

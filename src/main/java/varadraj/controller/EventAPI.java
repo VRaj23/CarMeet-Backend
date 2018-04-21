@@ -1,7 +1,6 @@
 package varadraj.controller;
 
 import java.security.Principal;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import varadraj.model.BaseResponse;
 import varadraj.model.Event;
 import varadraj.service.db.EventService;
 import varadraj.service.db.UserService;
@@ -26,37 +26,34 @@ public class EventAPI {
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping
-	public String event(Principal p) {
-		return "EventAPI "+p.getName();
-	}
 	
 	@PostMapping("/addEvent")
-	public String addEvent(@RequestBody Event event,Principal user) {
+	public BaseResponse addEvent(@RequestBody Event event,Principal user) {
 		event.setCreatedBy(userService.getUser(new Long(user.getName())));
 		eventService.saveEvent(event);
-		return "Event Added";
+		return new BaseResponse(201,"Event Added");
 	}
 	
 	@GetMapping("/allUserEvents")
-	public List<Event> getAllUserEvents(Principal user){
-		return eventService.getAllUserEvents(userService.getUser(new Long(user.getName())));
+	public BaseResponse getAllUserEvents(Principal user){
+		return new BaseResponse(200,
+				eventService.getAllUserEvents(userService.getUser(new Long(user.getName()))) );
 	}
 	
 	@DeleteMapping("/deleteEvent/{eventID}")
-	public String deleteEvent(@PathVariable long eventID, Principal user) {
+	public BaseResponse deleteEvent(@PathVariable long eventID, Principal user) {
 		eventService.deleteEvent(eventID,new Long(user.getName()));
-		return "Event Deleted";
+		return new BaseResponse(200,"Event Deleted");
 	}
 	
 	@PutMapping("/updateEvent")
-	public String updateEvent(@RequestBody Event event,Principal user) {
+	public BaseResponse updateEvent(@RequestBody Event event,Principal user) {
 		if(event.getEventID() < 1L)
 			throw new RuntimeException("Valid EventID required for Event Update");
 		
 		eventService.updateEvent(event,new Long(user.getName()));
 		
-		return "Event Update";
+		return new BaseResponse(200,"Event Update");
 	}
 	
 
